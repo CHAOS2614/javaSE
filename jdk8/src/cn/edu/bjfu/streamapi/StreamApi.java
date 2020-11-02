@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -35,9 +36,9 @@ public class StreamApi {
         employees.stream().skip(3).forEach(System.out::println);
 
         System.out.println("-----------------------------------------------");
-        employees.add(new Employee(1010,"张三",20,8000));
-        employees.add(new Employee(1010,"张三",20,8000));
-        employees.add(new Employee(1010,"张三",20,8000));
+        employees.add(new Employee(1010, "张三", 20, 8000));
+        employees.add(new Employee(1010, "张三", 20, 8000));
+        employees.add(new Employee(1010, "张三", 20, 8000));
         System.out.println(employees.size());
         employees.stream().distinct().forEach(System.out::println);
         System.out.println(employees.size());
@@ -55,7 +56,7 @@ public class StreamApi {
 
         List<Employee> employees = EmployeeData.getEmployees();
         Stream<String> stringStream = employees.stream().map(Employee::getName);
-        stringStream.filter(name -> name.length()>3).forEach(System.out::println);
+        stringStream.filter(name -> name.length() > 3).forEach(System.out::println);
     }
 
     /**
@@ -81,9 +82,9 @@ public class StreamApi {
 
     }
 
-    public static Stream<Character> formStringToStream(String str){
+    public static Stream<Character> formStringToStream(String str) {
         ArrayList<Character> list = new ArrayList<>();
-        for(Character c : str.toCharArray()){
+        for (Character c : str.toCharArray()) {
             list.add(c);
         }
         return list.stream();
@@ -99,10 +100,21 @@ public class StreamApi {
     }
 
     @Test
-    public void sortTest(){
+    public void sortTest() {
         //sorted--自然排序
-        List<Integer> list = new ArrayList<>(6);
-        //list.add(Supplier::get);
+        List<Double> list = new ArrayList<>(6);
+        Supplier<Double> supplier = Math::random;
+        list.add(supplier.get());
+        list.add(supplier.get());
+        list.add(supplier.get());
+        list.add(supplier.get());
+        list.add(supplier.get());
+        list.add(supplier.get());
+        list.stream().sorted().forEach(System.out::println);
+
+        //sorted(Comparator com)--定制排序
+        List<Employee> employees = EmployeeData.getEmployees();
+        employees.stream().sorted((e1, e2) -> Integer.compare(e1.getAge(), e2.getAge())).forEach(System.out::println);
 
     }
 }
