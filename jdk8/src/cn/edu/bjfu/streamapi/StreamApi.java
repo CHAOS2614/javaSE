@@ -100,6 +100,9 @@ public class StreamApi {
 
     @Test
     public void sortTest(){
+        //sorted--自然排序
+        List<Integer> list = new ArrayList<>(6);
+        //list.add(Supplier::get);
 
     }
 }
