@@ -4,9 +4,7 @@ import cn.edu.bjfu.lambda.Employee;
 import cn.edu.bjfu.lambda.EmployeeData;
 import org.junit.Test;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -65,4 +63,34 @@ public class StreamApi2 {
             System.out.println(employeeIterator.next());
         }
     }
+
+    /**
+     * 规约
+     */
+    @Test
+    public void test3(){
+        List<Integer> list = new ArrayList<>(10);
+        Random random = new Random();
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        list.add(random.nextInt(10));
+        Integer sum = list.stream().reduce(0, Integer::sum);
+        System.out.println(sum);
+        System.out.println("--------------------");
+        List<Employee> employees = EmployeeData.getEmployees();
+        System.out.println(employees
+                .stream()
+                .map(Employee::getSalary)
+                .reduce(Double::sum));
+
+    }
+
+
 }
