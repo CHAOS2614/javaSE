@@ -5,6 +5,7 @@ import cn.edu.bjfu.lambda.EmployeeData;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -59,7 +60,7 @@ public class StreamApi2 {
         employees.forEach(System.out::println);
         System.out.println("----------------外部迭代----------------");
         Iterator<Employee> employeeIterator = employees.iterator();
-        while (employeeIterator.hasNext()){
+        while (employeeIterator.hasNext()) {
             System.out.println(employeeIterator.next());
         }
     }
@@ -68,7 +69,7 @@ public class StreamApi2 {
      * 规约
      */
     @Test
-    public void test3(){
+    public void test3() {
         List<Integer> list = new ArrayList<>(10);
         Random random = new Random();
         list.add(random.nextInt(10));
@@ -89,8 +90,24 @@ public class StreamApi2 {
                 .stream()
                 .map(Employee::getSalary)
                 .reduce(Double::sum));
-
     }
 
+    /**
+     * 收集
+     */
+    @Test
+    public void test4(){
+
+        List<Employee> employees = EmployeeData.getEmployees();
+        List<Employee> employeeList = employees.stream()
+                .filter(e -> e.getSalary() > 6000)
+                .collect(Collectors.toList());
+        employeeList.forEach(System.out::println);
+        System.out.println("----------------------------------");
+        Set<Employee> employeeSet = employees.stream()
+                .filter(e -> e.getSalary() > 6000)
+                .collect(Collectors.toSet());
+        employeeSet.forEach(System.out::println);
+    }
 
 }
