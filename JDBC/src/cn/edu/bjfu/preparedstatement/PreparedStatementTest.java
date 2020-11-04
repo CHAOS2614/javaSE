@@ -55,4 +55,29 @@ public class PreparedStatementTest {
 
         Utils.closeResource(connection, preparedStatement);
     }
+
+    @Test
+    public void updateTest() {
+        //1.获取数据库连接
+        Connection connection = Utils.getConnection();
+        PreparedStatement preparedStatement = null;
+
+        try {
+            //2.预编译sql语句，换回PreparedStatement的实例
+            String updateSql = "update customers set name = ? where id = ?";
+            preparedStatement = connection.prepareStatement(updateSql);
+
+            //3.填充占位符
+            preparedStatement.setObject(1, "莫扎特");
+            preparedStatement.setObject(2, 18);
+
+            //4.执行
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            //5.关闭资源
+            Utils.closeResource(connection, preparedStatement);
+        }
+    }
 }

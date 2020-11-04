@@ -44,7 +44,7 @@ public class Utils {
      * 关闭资源
      *
      * @param connection 数据库连接
-     * @param statement  其实关的是prepareStatement，写的大一点
+     * @param statement  其实关的是preparedStatement，写的大一点
      */
     public static void closeResource(Connection connection, Statement statement) {
         try {
