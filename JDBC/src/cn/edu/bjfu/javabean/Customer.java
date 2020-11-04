@@ -61,7 +61,7 @@ public class Customer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", birth         =" + birth +
+                ", birth=" + birth +
                 '}';
     }
 }
