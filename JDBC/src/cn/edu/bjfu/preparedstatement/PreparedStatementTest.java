@@ -21,39 +21,29 @@ public class PreparedStatementTest {
 
         //获取连接
         Connection connection = Utils.getConnection();
-        System.out.println(connection);
-
-        //预编译sql语句，返回PreparedStatement实例
-        String insertSql = "insert into customers(name,email,birth)values(?,?,?)";
         PreparedStatement preparedStatement = null;
+
         try {
+            //预编译sql语句，返回PreparedStatement实例
+            String insertSql = "insert into customers(name,email,birth)values(?,?,?)";
             preparedStatement = connection.prepareStatement(insertSql);
+            //填充占位符
             preparedStatement.setString(1, "哪吒");
             preparedStatement.setString(2, "nezha@gmail.com");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy-MM-dd");
             java.util.Date date = null;
-            try {
-                date = simpleDateFormat.parse("1000-01-01");
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            date = simpleDateFormat.parse("1000-01-01");
             if (date != null) {
                 preparedStatement.setDate(3, new Date(date.getTime()));
             }
-        } catch (SQLException e) {
+            //执行
+            preparedStatement.execute();
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
+        } finally {
+            //关闭资源
+            Utils.closeResource(connection, preparedStatement);
         }
-
-        try {
-            if (preparedStatement != null) {
-                preparedStatement.execute();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Utils.closeResource(connection, preparedStatement);
     }
 
     @Test
