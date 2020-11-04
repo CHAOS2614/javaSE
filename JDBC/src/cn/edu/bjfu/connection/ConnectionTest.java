@@ -125,10 +125,12 @@ public class ConnectionTest {
      *      实现了数据与代码的分离，实现了解耦：换数据库只需改配置文件
      *      如果需要修改配置文件信息，不需要重新打包
      */
+
     @Test
-    public void connectionTest5(){
+    public void getConnection(){
+
         //读取配置文件中的基本信息
-        InputStream resourceAsStream = ConnectionTest.class.getClassLoader().getResourceAsStream("jdbc.properties");
+        InputStream resourceAsStream = ClassLoader.getSystemClassLoader().getResourceAsStream("jdbc.properties");
 
         Properties properties = new Properties();
         try {
@@ -136,6 +138,7 @@ public class ConnectionTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         String user = properties.getProperty("user");
         String password = properties.getProperty("password");
         String url = properties.getProperty("url");
@@ -148,10 +151,10 @@ public class ConnectionTest {
             e.printStackTrace();
         }
 
+        //获取连接
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url,user,password);
-            System.out.println(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
