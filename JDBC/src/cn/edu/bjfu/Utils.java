@@ -2,10 +2,7 @@ package cn.edu.bjfu;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 /**JDBC相关操作工具类
@@ -61,6 +58,17 @@ public class Utils {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void closeResource(Connection connection, Statement statement, ResultSet resultSet) {
+        closeResource(connection,statement);
+        if(resultSet!=null){
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
