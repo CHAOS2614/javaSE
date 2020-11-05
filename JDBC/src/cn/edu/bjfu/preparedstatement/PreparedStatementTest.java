@@ -21,7 +21,7 @@ public class PreparedStatementTest {
      * @param sql 带占位符的sql语句
      * @param args 填充占位符的可变形参，长度等于sql中占位符个数
      */
-    public void update(String sql, Object... args) {
+    public int update(String sql, Object... args) {
 
         Connection connection = Utils.getConnection();
         PreparedStatement preparedStatement = null;
@@ -34,12 +34,13 @@ public class PreparedStatementTest {
 
             //execute();如果是查询操作，有返回结果，则返回true
             //增删改没有返回结果，则返回false
-            preparedStatement.execute();
+            return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             Utils.closeResource(connection, preparedStatement);
         }
+        return 0;
     }
 
     @Test
