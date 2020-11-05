@@ -31,6 +31,9 @@ public class PreparedStatementTest {
             for (int i = 0; i < args.length; i++) {
                 preparedStatement.setObject(i + 1, args[i]);
             }
+
+            //execute();如果是查询操作，有返回结果，则返回true
+            //增删改没有返回结果，则返回false
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
