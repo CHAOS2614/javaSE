@@ -1,11 +1,11 @@
 package cn.edu.bjfu.transaction;
 
 import cn.edu.bjfu.Utils;
+import cn.edu.bjfu.dao.BaseDAO;
 import cn.edu.bjfu.preparedstatement.PreparedStatementTest;
 import org.junit.Test;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -67,6 +67,13 @@ public class TransactionTest {
             }
             e.printStackTrace();
         } finally {
+            if(connection!=null){
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             Utils.closeResource(connection, null);
         }
 
@@ -80,24 +87,7 @@ public class TransactionTest {
 
     public int update(Connection connection, String sql, Object... args) {
 
-        PreparedStatement preparedStatement = null;
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            for (int i = 0; i < args.length; i++) {
-                preparedStatement.setObject(i + 1, args[i]);
-            }
-            return preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            Utils.closeResource(null, preparedStatement);
-        }
-        return 0;
+        BaseDAO baseDAO = new BaseDAO();
+        return baseDAO.update(connection,sql,args);
     }
 }

@@ -1,8 +1,8 @@
 package cn.edu.bjfu.blob;
 
 import cn.edu.bjfu.Utils;
+import cn.edu.bjfu.dao.BaseDAO;
 import cn.edu.bjfu.javabean.Customer;
-import cn.edu.bjfu.preparedstatement.PreparedStatementQueryTest;
 import cn.edu.bjfu.preparedstatement.PreparedStatementTest;
 import org.junit.Test;
 
@@ -42,12 +42,14 @@ public class BlobTest {
 
     @Test
     public void queryTest() {
-        String sql = "select id,name,email,birth from customers where id =?";
-        PreparedStatementQueryTest psqt = new PreparedStatementQueryTest();
-        Customer customer = psqt.getInstance(Customer.class, sql, 20);
-        System.out.println(customer);
-
         Connection connection = Utils.getConnection();
+        String sql = "select id,name,email,birth from customers where id =?";
+        BaseDAO psqt = new BaseDAO();
+        Customer customer = psqt.getInstance(connection,Customer.class, sql, 20);
+        System.out.println(customer);
+        Utils.closeResource(connection,null);
+
+        connection = Utils.getConnection();
         String sql2 = "select photo from customers where id = ?";
         InputStream binaryStream = null;
         FileOutputStream fos = null;
