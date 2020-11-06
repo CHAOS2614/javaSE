@@ -3,10 +3,7 @@ package cn.edu.bjfu.dbutils;
 import cn.edu.bjfu.Utils;
 import cn.edu.bjfu.javabean.Customer;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.MapHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.*;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -95,7 +92,7 @@ public class DbUtilsTest {
             String sql = "select id,name,email,birth from customers where id = ?";
             QueryRunner runner = new QueryRunner();
             MapHandler handler = new MapHandler();
-            Map<String,Object> map = runner.query(connection, sql, handler, 10);
+            Map<String, Object> map = runner.query(connection, sql, handler, 10);
             System.out.println(map);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,5 +124,30 @@ public class DbUtilsTest {
         }
     }
 
+    /**
+     * ScalarHandler:是ResultSetHandler接口的实现类
+     * 对应表中的多条记录
+     * 将字段及相应的值作为map中的key和value
+     * 构成map对象构成的list
+     */
+    @Test
+    public void queryTest5() {
+        Connection connection = null;
+        try {
+            connection = Utils.getConnection();
+            String sql = "select count(*) from customers";
+            QueryRunner runner = new QueryRunner();
+            ScalarHandler handler = new ScalarHandler();
+            Long count = (Long) runner.query(connection, sql, handler);
+            System.out.println("共" + count + "条数据");
+            sql = "select max(birth) from customers";
+            Date maxBirth = (Date) runner.query(connection, sql, handler);
+            System.out.println("最大的生日是：" + maxBirth);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeResource(connection, null);
+        }
+    }
 
 }
