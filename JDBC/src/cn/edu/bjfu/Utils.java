@@ -1,7 +1,9 @@
 package cn.edu.bjfu;
 
+import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -19,11 +21,28 @@ public class Utils {
     private static ComboPooledDataSource cpds = new ComboPooledDataSource("myc3p0");
 
     /**
-     * 获得数据库连接
+     * druid连接池获得数据库连接
      * @return 数据库连接
      */
     public static Connection getConnection() {
+        InputStream resourceAsStream = ClassLoader.getSystemClassLoader().getResourceAsStream("druid.properties");
+        Properties pros = new Properties();
+        Connection connection = null;
+        try {
+            pros.load(resourceAsStream);
+            DataSource dataSource = DruidDataSourceFactory.createDataSource(pros);
+            connection = dataSource.getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
 
+    /**
+     * c3p0连接池获得数据库连接
+     * @return 一个数据库连接
+     */
+    public Connection getC3P0Connection(){
         Connection connection = null;
         try {
             connection = cpds.getConnection();
@@ -35,7 +54,6 @@ public class Utils {
 
     /**
      * 关闭资源
-     *
      * @param connection 数据库连接
      * @param statement  其实关的是preparedStatement，写的大一点
      */
@@ -68,6 +86,10 @@ public class Utils {
         }
     }
 
+    /**
+     * 不用连接池获得数据库连接
+     * @return 一个数据库连接
+     */
     public static Connection getConnectionOld(){
         Connection connection = null;
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("jdbc.properties");
