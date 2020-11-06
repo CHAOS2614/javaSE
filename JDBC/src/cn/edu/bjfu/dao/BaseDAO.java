@@ -1,7 +1,6 @@
 package cn.edu.bjfu.dao;
 
 import cn.edu.bjfu.Utils;
-import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -155,13 +154,5 @@ public class BaseDAO {
             field.setAccessible(true);
             field.set(t, columnValue);
         }
-    }
-
-    @Test
-    public void getValueTest(){
-        Connection connection = Utils.getConnection();
-        String sql = "select count(*) from user_table";
-        System.out.println(getValue(connection, sql).toString());
-        Utils.closeResource(connection,null);
     }
 }
