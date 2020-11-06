@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 升级操作见：
+ * @link https://www.bilibili.com/video/BV1eJ411c7rf?p=45
  * @author Chao Huaiyu
  * @date 2020/11/6
  */
