@@ -4,11 +4,13 @@ import cn.edu.bjfu.Utils;
 import cn.edu.bjfu.javabean.Customer;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * commons-dbutils 是Apache 组织提供的一个开源的JDBC工具类库
@@ -54,6 +56,26 @@ public class DbUtilsTest {
         } finally {
             Utils.closeResource(connection, null);
         }
+    }
 
+    /**
+     * BeanListHandler:是ResultSetHandler接口的实现类
+     * 用于封装表中的多条记录构成的集合
+     */
+    @Test
+    public void queryTest2() {
+        Connection connection = null;
+        try {
+            connection = Utils.getConnection();
+            String sql = "select id,name,email,birth from customers where id > ?";
+            QueryRunner runner = new QueryRunner();
+            BeanListHandler<Customer> handler = new BeanListHandler<>(Customer.class);
+            List<Customer> customers = runner.query(connection, sql, handler, 10);
+            customers.forEach(System.out::println);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeResource(connection, null);
+        }
     }
 }
