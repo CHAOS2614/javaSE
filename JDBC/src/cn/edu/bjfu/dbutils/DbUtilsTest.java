@@ -2,6 +2,7 @@ package cn.edu.bjfu.dbutils;
 
 import cn.edu.bjfu.Utils;
 import cn.edu.bjfu.javabean.Customer;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.*;
 import org.junit.Test;
@@ -146,7 +147,11 @@ public class DbUtilsTest {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Utils.closeResource(connection, null);
+            try {
+                DbUtils.close(connection);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
