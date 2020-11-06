@@ -1,5 +1,7 @@
 package cn.edu.bjfu;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -12,28 +14,22 @@ import java.util.Properties;
 public class Utils {
 
     /**
+     * //数据库连接池只需一个就够了
+     */
+    private static ComboPooledDataSource cpds = new ComboPooledDataSource("myc3p0");
+
+    /**
      * 获得数据库连接
-     *
      * @return 数据库连接
      */
     public static Connection getConnection() {
 
         Connection connection = null;
-        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("jdbc.properties");
-        Properties pros = new Properties();
-
         try {
-            pros.load(is);
-            String user = pros.getProperty("user");
-            String password = pros.getProperty("password");
-            String url = pros.getProperty("url");
-            String driverClass = pros.getProperty("driverClass");
-            Class.forName(driverClass);
-            connection = DriverManager.getConnection(url, user, password);
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+            connection = cpds.getConnection();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return connection;
     }
 
@@ -70,5 +66,24 @@ public class Utils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static Connection getConnectionOld(){
+        Connection connection = null;
+        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("jdbc.properties");
+        Properties pros = new Properties();
+
+        try {
+            pros.load(is);
+            String user = pros.getProperty("user");
+            String password = pros.getProperty("password");
+            String url = pros.getProperty("url");
+            String driverClass = pros.getProperty("driverClass");
+            Class.forName(driverClass);
+            connection = DriverManager.getConnection(url, user, password);
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 }
