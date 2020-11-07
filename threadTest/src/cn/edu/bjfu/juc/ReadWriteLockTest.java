@@ -1,5 +1,7 @@
 package cn.edu.bjfu.juc;
 
+import cn.edu.bjfu.Utils;
+
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -11,20 +13,21 @@ public class ReadWriteLockTest {
 
     public static void main(String[] args) {
         ReadWrite readWrite = new ReadWrite();
-        new Thread(new Runnable() {
+
+        Utils.getExecutorService().execute(new Runnable() {
             @Override
             public void run() {
                 readWrite.set(10);
             }
-        }, "write").start();
+        });
 
-        for (int i = 0; i < 100; i++) {
-            new Thread(new Runnable() {
+        for (int i = 0; i < 10; i++) {
+            Utils.getExecutorService().execute(new Runnable() {
                 @Override
                 public void run() {
                     readWrite.get();
                 }
-            }, "read").start();
+            });
         }
     }
 }

@@ -1,21 +1,26 @@
 package cn.edu.bjfu;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import java.util.concurrent.*;
+
+/**
+ * @author Chaos
+ */
 public class ThreadPool {
     public static void main(String[] args) {
 
-       ExecutorService service = Executors.newFixedThreadPool(10);
-
-       service.execute(new NumberThread());
-       service.submit(new NumberThread());
-
-       service.shutdown();
+        ThreadFactory namedFactory = new ThreadFactoryBuilder().setNameFormat("retryClient-pool-%d").build();
+        ExecutorService executorService = new ThreadPoolExecutor(10,
+                20,
+                200L,
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                namedFactory);
     }
 }
 
-class NumberThread implements Runnable{
+class NumberThread implements Runnable {
 
     @Override
     public void run() {

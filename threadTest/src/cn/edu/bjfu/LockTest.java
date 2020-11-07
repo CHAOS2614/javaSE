@@ -9,17 +9,10 @@ public class LockTest {
     public static void main(String[] args) {
         Window windows = new Window();
 
-        Thread thread1 = new Thread(windows);
-        Thread thread2 = new Thread(windows);
-        Thread thread3 = new Thread(windows);
+        Utils.getExecutorService().execute(windows);
+        Utils.getExecutorService().execute(windows);
+        Utils.getExecutorService().execute(windows);
 
-        thread1.setName("窗口1");
-        thread2.setName("窗口2");
-        thread3.setName("窗口3");
-
-        thread1.start();
-        thread2.start();
-        thread3.start();
     }
 }
 
@@ -32,13 +25,14 @@ class Window implements Runnable {
     @Override
     public void run() {
         while (true) {
+            lock.lock();
             try {
-                lock.lock();
                 if (tickets > 0) {
                     System.out.println(Thread.currentThread().getName() + "买票，票号:" + tickets);
                     tickets--;
-                } else
+                } else{
                     break;
+                }
             } finally {
                 lock.unlock();
             }

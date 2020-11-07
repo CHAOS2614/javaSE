@@ -1,5 +1,8 @@
 package cn.edu.bjfu;
 
+/**
+ * @author Chaos
+ */
 public class ProductTest {
 
     public static void main(String[] args) {
@@ -75,8 +78,8 @@ class Customer extends Thread {
 
     @Override
     public void run() {
-
-        while (true)
+        while (true){
             clerk.consumeProduct();
+        }
     }
 }

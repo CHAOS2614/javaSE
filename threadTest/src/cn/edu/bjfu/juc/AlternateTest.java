@@ -1,5 +1,7 @@
 package cn.edu.bjfu.juc;
 
+import cn.edu.bjfu.Utils;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,33 +14,35 @@ public class AlternateTest {
 
     public static void main(String[] args) {
         AlternateDemo alternateDemo = new AlternateDemo();
-        new Thread(new Runnable() {
+
+
+        Utils.getExecutorService().execute(new Runnable() {
             @Override
             public void run() {
                 for (int i = 1; i <= 20; i++) {
                     alternateDemo.loopA(i);
                 }
             }
-        }, "A").start();
+        });
 
-        new Thread(new Runnable() {
+        Utils.getExecutorService().execute(new Runnable() {
             @Override
             public void run() {
                 for (int i = 1; i <= 20; i++) {
                     alternateDemo.loopB(i);
                 }
             }
-        }, "B").start();
+        });
 
-        new Thread(new Runnable() {
+        Utils.getExecutorService().execute(new Runnable() {
             @Override
             public void run() {
                 for (int i = 1; i <= 20; i++) {
                     alternateDemo.loopC(i);
-                    System.out.println("----------" + i + "---------");
+                    System.out.println("-----------" + i + "-----------");
                 }
             }
-        }, "C").start();
+        });
     }
 }
 
@@ -57,7 +61,7 @@ class AlternateDemo {
                 condition1.await();
             }
             for (int i = 1; i <= 1; i++) {
-                System.out.println(Thread.currentThread().getName() + "\t" + ++i + "\t" + totalLoop);
+                System.out.println(Thread.currentThread().getName() + "\t" + i + "\t" + totalLoop);
             }
             number = 2;
             condition2.signal();
@@ -80,7 +84,7 @@ class AlternateDemo {
                 condition2.await();
             }
             for (int i = 1; i <= 2; i++) {
-                System.out.println(Thread.currentThread().getName() + "\t" + ++i + "\t" + totalLoop);
+                System.out.println(Thread.currentThread().getName() + "\t" + i + "\t" + totalLoop);
             }
             number = 3;
             condition3.signal();
@@ -98,7 +102,7 @@ class AlternateDemo {
                 condition3.await();
             }
             for (int i = 1; i <= 3; i++) {
-                System.out.println(Thread.currentThread().getName() + "\t" + ++i + "\t" + totalLoop);
+                System.out.println(Thread.currentThread().getName() + "\t" + i + "\t" + totalLoop);
             }
             number = 1;
             condition1.signal();

@@ -1,5 +1,7 @@
 package cn.edu.bjfu.juc;
 
+import cn.edu.bjfu.Utils;
+
 import static java.lang.Thread.sleep;
 
 /**
@@ -13,7 +15,8 @@ public class VolatileTest {
 
     public static void main(String[] args) {
         ThreadDemo threadDemo = new ThreadDemo();
-        new Thread(threadDemo).start();
+
+        Utils.getExecutorService().execute(threadDemo);
         //可以通过加锁解决内存可见性问题，但是效率低
         while (true){
             if(threadDemo.isFlag()){
