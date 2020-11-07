@@ -15,7 +15,6 @@ public class AlternateTest {
     public static void main(String[] args) {
         AlternateDemo alternateDemo = new AlternateDemo();
 
-
         Utils.getExecutorService().execute(new Runnable() {
             @Override
             public void run() {

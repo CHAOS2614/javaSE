@@ -14,7 +14,7 @@ public class Utils {
             20,
             200L,
             TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>(),
+            new LinkedBlockingQueue<>(),
             new ThreadFactoryBuilder().setNameFormat("retryClient-pool-%d").build());
 
     public static ExecutorService getExecutorService(){
