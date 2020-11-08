@@ -57,7 +57,7 @@ public class ChannelTest {
              FileChannel outChannel = FileChannel.open(Paths.get("images\\fragile4.JPG"),
                      StandardOpenOption.WRITE,
                      StandardOpenOption.READ,
-                     StandardOpenOption.CREATE_NEW)) {
+                     StandardOpenOption.CREATE)) {
 
             //内存映射文件
             MappedByteBuffer inMappedBuffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
