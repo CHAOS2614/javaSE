@@ -6,7 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  * @author Chao Huaiyu
@@ -14,6 +17,9 @@ import java.nio.channels.FileChannel;
  */
 public class ChannelTest {
 
+    /**
+     * 利用文件完成图片的复制（非直接缓冲区）
+     */
     @Test
     public void channelTest1() {
         //获取相关资源
@@ -34,6 +40,33 @@ public class ChannelTest {
                 //清空缓冲区
                 buffer.clear();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 利用直接缓冲区完成文件的复制（内存映射文件）
+     */
+    @Test
+    public void channelDri() {
+
+        //获取通道资源
+        try (FileChannel inChannel = FileChannel.open(Paths.get("images\\fragile.JPG"),
+                StandardOpenOption.READ);
+             FileChannel outChannel = FileChannel.open(Paths.get("images\\fragile4.JPG"),
+                     StandardOpenOption.WRITE,
+                     StandardOpenOption.READ,
+                     StandardOpenOption.CREATE_NEW)) {
+
+            //内存映射文件
+            MappedByteBuffer inMappedBuffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
+            MappedByteBuffer outMappedBuffer = outChannel.map(FileChannel.MapMode.READ_WRITE, 0, inChannel.size());
+
+            //直接对缓冲区数据进行读写操作
+            byte[] dst = new byte[inMappedBuffer.limit()];
+            inMappedBuffer.get(dst);
+            outMappedBuffer.put(dst);
         } catch (IOException e) {
             e.printStackTrace();
         }
